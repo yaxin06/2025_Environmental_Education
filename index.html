@@ -15,16 +15,19 @@
             sage: '#93b48b',
             soil: '#6c4f3d',
             cream: '#f7f4ec',
-            leaf: '#dff1dd'
+            leaf: '#dff1dd',
+            mist: '#edf5ea'
           },
           boxShadow: {
             glow: '0 20px 60px rgba(39,93,56,0.18)',
-            soft: '0 12px 30px rgba(0,0,0,0.08)'
+            soft: '0 12px 30px rgba(0,0,0,0.08)',
+            card: '0 10px 35px rgba(39,93,56,0.10)'
           },
           animation: {
             floaty: 'floaty 5s ease-in-out infinite',
             fadeUp: 'fadeUp .8s ease forwards',
-            pulseSoft: 'pulseSoft 2.8s infinite'
+            pulseSoft: 'pulseSoft 2.8s infinite',
+            slowSpin: 'slowSpin 14s linear infinite'
           },
           keyframes: {
             floaty: {
@@ -37,7 +40,11 @@
             },
             pulseSoft: {
               '0%,100%': { transform: 'scale(1)', opacity: 1 },
-              '50%': { transform: 'scale(1.03)', opacity: .85 }
+              '50%': { transform: 'scale(1.04)', opacity: .85 }
+            },
+            slowSpin: {
+              from: { transform: 'rotate(0deg)' },
+              to: { transform: 'rotate(360deg)' }
             }
           }
         }
@@ -46,16 +53,20 @@
   </script>
   <style>
     html { scroll-behavior: smooth; }
-    body { font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif; }
+    body {
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      overflow-x: hidden;
+    }
     .glass {
-      background: rgba(255,255,255,0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
     .hero-bg {
       background:
         radial-gradient(circle at 10% 20%, rgba(147,180,139,.28), transparent 25%),
         radial-gradient(circle at 90% 15%, rgba(95,139,76,.18), transparent 25%),
+        radial-gradient(circle at 50% 80%, rgba(223,241,221,.8), transparent 30%),
         linear-gradient(135deg, #f7f4ec 0%, #eef6ea 50%, #f6fbf1 100%);
     }
     .leaf-dot::before {
@@ -78,20 +89,40 @@
       column-count: 1;
       column-gap: 1rem;
     }
-    @media (min-width: 768px) { .masonry { column-count: 2; } }
-    @media (min-width: 1280px) { .masonry { column-count: 3; } }
+    @media (min-width: 768px) {
+      .masonry { column-count: 2; }
+    }
+    @media (min-width: 1280px) {
+      .masonry { column-count: 3; }
+    }
     .masonry-item {
       break-inside: avoid;
       margin-bottom: 1rem;
     }
     .activity-card.active {
       outline: 2px solid #275d38;
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+    }
+    .nav-link.active {
+      color: #275d38;
+      font-weight: 800;
+    }
+    .bg-grid {
+      background-image:
+        linear-gradient(rgba(39,93,56,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(39,93,56,.05) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .chip.active {
+      background: #275d38;
+      color: #fff;
+      border-color: #275d38;
     }
   </style>
 </head>
 <body class="bg-cream text-slate-800">
-  <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/40 bg-white/70 backdrop-blur-lg">
+  <!-- 導覽列 -->
+  <header class="fixed top-0 left-0 right-0 z-50 border-b border-white/40 bg-white/75 backdrop-blur-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
         <a href="#top" class="flex items-center gap-3 font-bold text-forest">
@@ -101,54 +132,63 @@
             <div class="text-[11px] text-slate-500 font-medium">招生導向互動展示頁</div>
           </div>
         </a>
+
         <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-          <a href="#about" class="hover:text-forest">活動概覽</a>
-          <a href="#highlights" class="hover:text-forest">六大亮點</a>
-          <a href="#timeline" class="hover:text-forest">活動時程</a>
-          <a href="#gallery" class="hover:text-forest">精彩照片</a>
-          <a href="#recruit" class="hover:text-forest">加入地生系</a>
+          <a href="#about" class="nav-link hover:text-forest transition">活動概覽</a>
+          <a href="#highlights" class="nav-link hover:text-forest transition">六大亮點</a>
+          <a href="#timeline" class="nav-link hover:text-forest transition">活動時程</a>
+          <a href="#quizSection" class="nav-link hover:text-forest transition">互動測驗</a>
+          <a href="#gallery" class="nav-link hover:text-forest transition">精彩照片牆</a>
+          <a href="#recruit" class="nav-link hover:text-forest transition">加入地生系</a>
         </nav>
+
+        <a href="#gallery" class="hidden sm:inline-flex px-4 py-2 rounded-full bg-forest text-white text-sm font-semibold hover:opacity-90 transition">
+          看成果照片
+        </a>
       </div>
     </div>
   </header>
 
+  <!-- Hero -->
   <main id="top" class="pt-16">
-    <section class="hero-bg relative overflow-hidden">
+    <section class="hero-bg relative overflow-hidden min-h-[88vh] flex items-center">
       <div class="absolute inset-0 pointer-events-none opacity-60">
-        <div class="absolute top-24 left-10 w-20 h-20 rounded-full bg-white/40 blur-2xl animate-floaty"></div>
+        <div class="absolute top-24 left-10 w-24 h-24 rounded-full bg-white/40 blur-2xl animate-floaty"></div>
         <div class="absolute top-40 right-12 w-28 h-28 rounded-full bg-green-200/50 blur-3xl animate-floaty" style="animation-delay:.8s"></div>
         <div class="absolute bottom-16 left-1/4 w-24 h-24 rounded-full bg-lime-100/60 blur-3xl animate-floaty" style="animation-delay:1.5s"></div>
+        <div class="absolute -right-10 top-20 w-72 h-72 rounded-full border border-green-200/40 animate-slowSpin"></div>
       </div>
 
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
         <div class="grid lg:grid-cols-2 gap-10 items-center">
           <div class="space-y-6 animate-fadeUp">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 shadow-soft text-sm text-forest font-semibold">
               <span class="w-2.5 h-2.5 rounded-full bg-moss animate-pulseSoft"></span>
               臺北市立大學 114 學年度 環境教育週
             </div>
+
             <div>
               <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight text-slate-900">
                 永續未來
                 <span class="text-forest">森生不息</span>
               </h1>
               <p class="mt-4 text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl">
-                從苔球、草本香椎、天然蠟燭，到森林資源與碳匯闖關互動，
-                地球環境暨生物資源學系把環境教育做成一場看得見、摸得到、玩得進去的永續體驗。
+                從植物手作、森林保育、碳匯概念到低碳消費，
+                地球環境暨生物資源學系把環境教育轉化為一場可參與、可感受、可實踐的永續體驗。
               </p>
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div class="glass rounded-3xl p-4 shadow-soft">
-                <div class="text-2xl font-black text-forest">6</div>
+                <div class="counter text-2xl font-black text-forest" data-target="6">0</div>
                 <div class="text-sm text-slate-600">主題活動</div>
               </div>
               <div class="glass rounded-3xl p-4 shadow-soft">
-                <div class="text-2xl font-black text-forest">4</div>
+                <div class="counter text-2xl font-black text-forest" data-target="4">0</div>
                 <div class="text-sm text-slate-600">永續工作坊</div>
               </div>
               <div class="glass rounded-3xl p-4 shadow-soft">
-                <div class="text-2xl font-black text-forest">2</div>
+                <div class="counter text-2xl font-black text-forest" data-target="2">0</div>
                 <div class="text-sm text-slate-600">闖關互動</div>
               </div>
               <div class="glass rounded-3xl p-4 shadow-soft">
@@ -158,19 +198,49 @@
             </div>
 
             <div class="flex flex-wrap gap-3">
-              <a href="#highlights" class="px-6 py-3 rounded-2xl bg-forest text-white font-semibold shadow-glow hover:-translate-y-0.5 transition">探索六大亮點</a>
-              <a href="#recruit" class="px-6 py-3 rounded-2xl bg-white text-forest font-semibold border border-forest/15 hover:bg-green-50 transition">為什麼選地生系？</a>
+              <a href="#highlights" class="px-6 py-3 rounded-2xl bg-forest text-white font-semibold shadow-glow hover:-translate-y-0.5 transition">
+                探索六大亮點
+              </a>
+              <a href="#quizSection" class="px-6 py-3 rounded-2xl bg-white text-forest font-semibold border border-forest/15 hover:bg-green-50 transition">
+                互動測驗
+              </a>
             </div>
           </div>
 
-          <div class="relative animate-fadeUp" style="animation-delay:.15s">
-            <div class="absolute -inset-4 bg-gradient-to-br from-green-200/40 to-white/40 blur-2xl rounded-[2rem]"></div>
-            <div class="relative bg-white/80 backdrop-blur rounded-[2rem] p-4 sm:p-5 shadow-glow border border-white/70">
-              <img src="https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135219.png" alt="DIY植栽苔球活動照片" class="w-full h-[420px] object-cover rounded-[1.5rem]" />
-              <div class="grid grid-cols-3 gap-3 mt-3">
-                <img src="https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135755.png" alt="草本香椎DIY" class="h-24 sm:h-28 w-full object-cover rounded-2xl" />
-                <img src="https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135824.png" alt="手工蠟燭DIY" class="h-24 sm:h-28 w-full object-cover rounded-2xl" />
-                <img src="https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135730.png" alt="森益盎然闖關活動" class="h-24 sm:h-28 w-full object-cover rounded-2xl" />
+          <!-- 右側改為互動資訊區，不放照片 -->
+          <div class="animate-fadeUp" style="animation-delay:.15s">
+            <div class="relative bg-white/80 backdrop-blur rounded-[2rem] p-6 sm:p-8 shadow-glow border border-white/70">
+              <div class="inline-flex px-3 py-1 rounded-full bg-leaf text-forest text-sm font-bold">
+                本站特色
+              </div>
+              <h2 class="text-3xl font-black mt-4 leading-tight">
+                不只是成果展示，<br>更是地生系的互動招生頁
+              </h2>
+              <div class="mt-6 grid sm:grid-cols-2 gap-4">
+                <div class="rounded-3xl bg-mist p-5">
+                  <div class="text-lg font-bold text-forest">活動切換</div>
+                  <p class="mt-2 text-slate-600 leading-7">點選卡片即可切換六大活動內容。</p>
+                </div>
+                <div class="rounded-3xl bg-mist p-5">
+                  <div class="text-lg font-bold text-forest">關鍵字篩選</div>
+                  <p class="mt-2 text-slate-600 leading-7">快速查找植物、森林、碳匯與循環議題。</p>
+                </div>
+                <div class="rounded-3xl bg-mist p-5">
+                  <div class="text-lg font-bold text-forest">永續測驗</div>
+                  <p class="mt-2 text-slate-600 leading-7">用互動方式提高新生瀏覽停留時間。</p>
+                </div>
+                <div class="rounded-3xl bg-mist p-5">
+                  <div class="text-lg font-bold text-forest">照片牆聚焦</div>
+                  <p class="mt-2 text-slate-600 leading-7">所有活動照片集中在成果牆，版面更乾淨。</p>
+                </div>
+              </div>
+
+              <div class="mt-6 p-5 rounded-[1.5rem] bg-gradient-to-r from-green-50 to-lime-50 border border-green-100">
+                <div class="font-bold text-forest mb-2">招生定位</div>
+                <p class="text-slate-700 leading-8">
+                  這個網站要讓新生一眼看見：地生系不只是學科知識，
+                  而是能把植物、生態、環境教育與永續實踐真正做進校園生活裡。
+                </p>
               </div>
             </div>
           </div>
@@ -178,14 +248,18 @@
       </div>
     </section>
 
-    <section id="about" class="py-16 lg:py-20">
+    <!-- 活動概覽 -->
+    <section id="about" class="py-16 lg:py-20 bg-grid">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-[1.15fr_.85fr] gap-8 items-start">
           <div class="bg-white rounded-[2rem] p-7 shadow-soft border border-slate-100">
             <div class="inline-flex px-3 py-1 rounded-full bg-leaf text-forest text-sm font-bold">活動概覽</div>
             <h2 class="text-3xl font-black mt-4 mb-4 text-slate-900">把環境教育做成能親手感受的學習現場</h2>
             <p class="text-slate-600 leading-8 text-[1.05rem]">
-              本次環境教育週由地球環境暨生物資源學系主辦，結合工作坊與闖關活動，從減塑、碳匯、森林保育、天然香品、循環利用到低碳消費，讓參與者不只是「知道永續」，而是真的透過觸摸、嗅聞、製作、遊戲與反思，把永續理念帶回日常生活。
+              本次環境教育週由地球環境暨生物資源學系主辦，結合工作坊與闖關活動，
+              從減塑、碳匯、森林保育、天然香品、循環利用到低碳消費，
+              讓參與者不只是「知道永續」，而是透過動手做、玩中學與現場互動，
+              真正把永續概念帶進生活。
             </p>
             <div class="grid sm:grid-cols-2 gap-4 mt-6">
               <div class="rounded-3xl bg-slate-50 p-5">
@@ -201,25 +275,25 @@
 
           <div class="bg-gradient-to-br from-forest to-moss rounded-[2rem] p-7 text-white shadow-glow">
             <div class="text-sm font-semibold uppercase tracking-[0.22em] text-green-100">Why it matters</div>
-            <h3 class="text-2xl font-black mt-3">不是只有活動紀錄，
-              更是一張地生系的招生名片</h3>
+            <h3 class="text-2xl font-black mt-3">不是只有活動紀錄，<br>更是一張地生系的招生名片</h3>
             <div class="space-y-4 mt-6 text-green-50 leading-7">
-              <p class="leaf-dot">有知識深度：環境議題、森林、碳匯、SDGs 都融入課程。</p>
+              <p class="leaf-dot">有知識深度：森林、碳匯、SDGs、循環經濟都融入課程。</p>
               <p class="leaf-dot">有實作溫度：讓學習從手作與互動中自然發生。</p>
-              <p class="leaf-dot">有跨域特色：結合生物、環境教育、生活實踐與公眾溝通。</p>
-              <p class="leaf-dot">有招生吸引力：新生能一眼看見地生系不只讀書，還能把知識變成行動。</p>
+              <p class="leaf-dot">有跨域特色：結合生物、環境教育、生活實踐與公共溝通。</p>
+              <p class="leaf-dot">有招生吸引力：讓新生直接看到地生系的行動力與創造力。</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- 六大亮點 -->
     <section id="highlights" class="py-16 bg-gradient-to-b from-transparent to-green-50/60">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-8">
           <div>
             <div class="inline-flex px-3 py-1 rounded-full bg-white shadow-soft text-sm font-bold text-forest">六大活動亮點</div>
-            <h2 class="text-3xl sm:text-4xl font-black mt-4">點選活動卡片，查看互動介紹與照片</h2>
+            <h2 class="text-3xl sm:text-4xl font-black mt-4">點選活動卡片，查看詳細介紹</h2>
           </div>
           <div class="flex flex-wrap gap-2">
             <button class="filter-btn px-4 py-2 rounded-full bg-forest text-white text-sm font-semibold" data-filter="all">全部</button>
@@ -228,41 +302,78 @@
           </div>
         </div>
 
+        <!-- 關鍵字篩選 -->
+        <div class="mb-6 flex flex-wrap gap-2">
+          <button class="chip px-4 py-2 rounded-full border border-slate-300 text-sm font-semibold active" data-tag="all">全部關鍵字</button>
+          <button class="chip px-4 py-2 rounded-full border border-slate-300 text-sm font-semibold" data-tag="植物">植物</button>
+          <button class="chip px-4 py-2 rounded-full border border-slate-300 text-sm font-semibold" data-tag="森林">森林</button>
+          <button class="chip px-4 py-2 rounded-full border border-slate-300 text-sm font-semibold" data-tag="碳匯">碳匯</button>
+          <button class="chip px-4 py-2 rounded-full border border-slate-300 text-sm font-semibold" data-tag="循環">循環</button>
+          <button class="chip px-4 py-2 rounded-full border border-slate-300 text-sm font-semibold" data-tag="生活永續">生活永續</button>
+        </div>
+
         <div id="activityGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
       </div>
     </section>
 
+    <!-- 活動詳細內容 -->
     <section id="detailPanel" class="py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-[1fr_1.1fr] gap-8 items-start">
+        <div class="grid lg:grid-cols-[1fr_.85fr] gap-8 items-start">
           <div class="bg-white rounded-[2rem] p-7 shadow-soft border border-slate-100 sticky top-24">
             <div class="text-sm font-semibold text-forest tracking-[0.2em] uppercase">活動深度導覽</div>
             <h3 id="panelTitle" class="text-3xl font-black mt-3">DIY 植栽苔球</h3>
+
             <div class="grid sm:grid-cols-2 gap-3 mt-5 text-sm">
-              <div class="rounded-2xl bg-slate-50 p-4"><span class="font-bold text-forest">時間</span><div id="panelTime" class="mt-1 text-slate-600"></div></div>
-              <div class="rounded-2xl bg-slate-50 p-4"><span class="font-bold text-forest">地點</span><div id="panelLocation" class="mt-1 text-slate-600"></div></div>
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <span class="font-bold text-forest">時間</span>
+                <div id="panelTime" class="mt-1 text-slate-600"></div>
+              </div>
+              <div class="rounded-2xl bg-slate-50 p-4">
+                <span class="font-bold text-forest">地點</span>
+                <div id="panelLocation" class="mt-1 text-slate-600"></div>
+              </div>
             </div>
+
             <p id="panelDescription" class="mt-5 leading-8 text-slate-600"></p>
+
             <div id="panelTags" class="flex flex-wrap gap-2 mt-5"></div>
+
             <div class="mt-7 rounded-[1.5rem] bg-gradient-to-r from-green-50 to-lime-50 p-5 border border-green-100">
               <div class="font-bold text-forest mb-2">招生亮點對應</div>
               <p id="panelRecruit" class="text-slate-700 leading-7"></p>
             </div>
           </div>
 
-          <div>
-            <div id="panelGallery" class="grid sm:grid-cols-2 gap-4"></div>
+          <div class="space-y-5">
+            <div class="bg-white rounded-[2rem] p-7 shadow-soft border border-slate-100">
+              <div class="text-sm font-semibold text-forest tracking-[0.2em] uppercase">活動特色標籤</div>
+              <div id="featureBullets" class="mt-5 space-y-4"></div>
+            </div>
+
+            <div class="bg-gradient-to-br from-forest to-moss text-white rounded-[2rem] p-7 shadow-glow">
+              <div class="text-sm font-semibold tracking-[0.2em] uppercase text-green-100">學習價值</div>
+              <h4 class="text-2xl font-black mt-3">從知識到行動的環境教育</h4>
+              <p id="panelValue" class="mt-4 leading-8 text-green-50"></p>
+            </div>
+
+            <div class="bg-white rounded-[2rem] p-7 shadow-soft border border-slate-100">
+              <div class="text-sm font-semibold text-forest tracking-[0.2em] uppercase">適合什麼樣的新生？</div>
+              <div id="panelAudience" class="mt-4 text-slate-700 leading-8"></div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- 活動時程 -->
     <section id="timeline" class="py-16 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-10">
           <div class="inline-flex px-3 py-1 rounded-full bg-leaf text-forest text-sm font-bold">活動時程</div>
           <h2 class="text-3xl sm:text-4xl font-black mt-4">一週內，讓校園變成永續學習基地</h2>
         </div>
+
         <div class="relative timeline-line pl-12 space-y-8">
           <div class="relative bg-slate-50 rounded-[1.5rem] p-6 shadow-soft">
             <div class="absolute -left-[2.95rem] top-7 w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center font-black">1</div>
@@ -270,18 +381,21 @@
             <div class="text-2xl font-black mt-1">DIY 植栽苔球</div>
             <p class="mt-2 text-slate-600 leading-7">從減塑出發，透過日本苔球技藝與天然材料，讓園藝成為可被重新思考的生活選擇。</p>
           </div>
+
           <div class="relative bg-slate-50 rounded-[1.5rem] p-6 shadow-soft">
             <div class="absolute -left-[2.95rem] top-7 w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center font-black">2</div>
             <div class="text-sm font-bold text-moss">11/26（三）</div>
             <div class="text-2xl font-black mt-1">碳為觀植 × 森益盎然</div>
             <p class="mt-2 text-slate-600 leading-7">以快問快答、碳足跡計算、森林行為卡與承諾樹互動，讓抽象環境概念化為參與者的實際選擇。</p>
           </div>
+
           <div class="relative bg-slate-50 rounded-[1.5rem] p-6 shadow-soft">
             <div class="absolute -left-[2.95rem] top-7 w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center font-black">3</div>
             <div class="text-sm font-bold text-moss">11/27（四）</div>
             <div class="text-2xl font-black mt-1">草本香椎 DIY</div>
             <p class="mt-2 text-slate-600 leading-7">讓嗅覺成為環教媒介，從天然植物粉末與室內空氣品質出發，思考環境與身體的雙重友善。</p>
           </div>
+
           <div class="relative bg-slate-50 rounded-[1.5rem] p-6 shadow-soft">
             <div class="absolute -left-[2.95rem] top-7 w-10 h-10 rounded-full bg-forest text-white flex items-center justify-center font-black">4</div>
             <div class="text-sm font-bold text-moss">11/28（五）～11/29（六）</div>
@@ -292,14 +406,26 @@
       </div>
     </section>
 
-    <section class="py-16 bg-gradient-to-br from-forest to-moss text-white">
+    <!-- 測驗 -->
+    <section id="quizSection" class="py-16 bg-gradient-to-br from-forest to-moss text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-2 gap-10 items-center">
           <div>
             <div class="inline-flex px-3 py-1 rounded-full bg-white/15 text-sm font-bold">互動小測驗</div>
             <h2 class="text-3xl sm:text-4xl font-black mt-4">你最適合哪一種地生系活動風格？</h2>
-            <p class="mt-4 text-green-50 leading-8">做完這個小測驗，看看你是「手作實踐派」、「環境倡議派」，還是「森林守護派」。這一區很適合放在招生網站，能增加停留時間與互動感。</p>
+            <p class="mt-4 text-green-50 leading-8">
+              做完這個小測驗，看看你是「手作實踐派」、「環境倡議派」，還是「森林守護派」。
+              這一區很適合放在招生網站，能提高停留時間與互動感。
+            </p>
+
+            <div class="mt-6 rounded-[1.5rem] bg-white/10 p-5 border border-white/10">
+              <div class="font-bold">互動加值點</div>
+              <p class="mt-2 leading-7 text-green-50">
+                新進網站的使用者不只看文字，還能透過測驗與篩選卡片，更快找到自己有興趣的活動內容。
+              </p>
+            </div>
           </div>
+
           <div class="bg-white text-slate-800 rounded-[2rem] p-7 shadow-glow">
             <div id="quizBox"></div>
           </div>
@@ -307,6 +433,7 @@
       </div>
     </section>
 
+    <!-- 精彩照片牆：唯一保留照片的地方 -->
     <section id="gallery" class="py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-8">
@@ -314,12 +441,26 @@
             <div class="inline-flex px-3 py-1 rounded-full bg-leaf text-forest text-sm font-bold">精彩照片牆</div>
             <h2 class="text-3xl sm:text-4xl font-black mt-4">把一整週的綠色行動，收藏成校園記憶</h2>
           </div>
-          <p class="text-slate-600 max-w-xl leading-7">點擊照片可放大檢視。這裡整合了六大活動的代表影像，適合作為成果展示與招生形象頁的核心視覺區。</p>
+          <p class="text-slate-600 max-w-xl leading-7">
+            所有成果照片集中在這裡展示。點擊照片可放大，讓版面更俐落，也更符合你要的網站呈現方式。
+          </p>
         </div>
+
+        <div class="mb-6 flex flex-wrap gap-2">
+          <button class="gallery-filter px-4 py-2 rounded-full bg-forest text-white text-sm font-semibold" data-gallery="all">全部照片</button>
+          <button class="gallery-filter px-4 py-2 rounded-full bg-white text-slate-700 text-sm font-semibold border" data-gallery="DIY 植栽苔球">苔球</button>
+          <button class="gallery-filter px-4 py-2 rounded-full bg-white text-slate-700 text-sm font-semibold border" data-gallery="碳為觀植">碳為觀植</button>
+          <button class="gallery-filter px-4 py-2 rounded-full bg-white text-slate-700 text-sm font-semibold border" data-gallery="森益盎然">森益盎然</button>
+          <button class="gallery-filter px-4 py-2 rounded-full bg-white text-slate-700 text-sm font-semibold border" data-gallery="草本香椎 DIY">草本香椎</button>
+          <button class="gallery-filter px-4 py-2 rounded-full bg-white text-slate-700 text-sm font-semibold border" data-gallery="手工蠟燭 DIY">手工蠟燭</button>
+          <button class="gallery-filter px-4 py-2 rounded-full bg-white text-slate-700 text-sm font-semibold border" data-gallery="咖啡渣：渣渣不廢，綠力無限">咖啡渣</button>
+        </div>
+
         <div id="masonryGallery" class="masonry"></div>
       </div>
     </section>
 
+    <!-- 招生 -->
     <section id="recruit" class="py-16 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-8 items-stretch">
@@ -327,12 +468,13 @@
             <div class="inline-flex px-3 py-1 rounded-full bg-white text-forest text-sm font-bold">招生導向內容</div>
             <h2 class="text-3xl font-black mt-4">為什麼這樣的活動，正是地生系最吸引人的地方？</h2>
             <div class="mt-6 space-y-4 text-slate-700 leading-8">
-              <p class="leaf-dot">因為地生系不是把環境議題停留在課本，而是讓學生真正在校園裡設計、實踐、傳達。</p>
+              <p class="leaf-dot">地生系不是把環境議題停留在課本，而是讓學生真正在校園裡設計、實踐與傳達。</p>
               <p class="leaf-dot">從森林、植物、碳匯、空氣品質到循環利用，展現地球科學與生物資源的跨域整合能力。</p>
               <p class="leaf-dot">學生不只是參與者，更能成為策劃者、引導者與環境教育推廣者。</p>
               <p class="leaf-dot">對未來新生來說，這代表在地生系可以學知識、做活動、做溝通，也做真正有溫度的改變。</p>
             </div>
           </div>
+
           <div class="rounded-[2rem] bg-slate-900 text-white p-8 shadow-glow">
             <div class="text-sm font-semibold tracking-[0.2em] uppercase text-green-200">Department DNA</div>
             <div class="grid sm:grid-cols-2 gap-4 mt-6">
@@ -342,7 +484,7 @@
               </div>
               <div class="rounded-3xl bg-white/5 p-5 border border-white/10">
                 <div class="text-lg font-bold">高互動學習</div>
-                <p class="mt-2 text-slate-300 leading-7">課堂之外，也有活動、策展與現場引導的經驗。</p>
+                <p class="mt-2 text-slate-300 leading-7">課堂之外，也有活動策劃與現場引導經驗。</p>
               </div>
               <div class="rounded-3xl bg-white/5 p-5 border border-white/10">
                 <div class="text-lg font-bold">生活連結強</div>
@@ -359,12 +501,15 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="bg-slate-950 text-slate-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div class="grid md:grid-cols-2 gap-6 items-center">
         <div>
           <div class="text-white font-black text-xl">地球環境暨生物資源學系</div>
-          <p class="mt-2 text-slate-400 leading-7">將環境知識轉化為實踐，把校園活動化為永續行動，也把成果轉化為對未來新生最有說服力的故事。</p>
+          <p class="mt-2 text-slate-400 leading-7">
+            將環境知識轉化為實踐，把校園活動化為永續行動，也把成果轉化為對未來新生最有說服力的故事。
+          </p>
         </div>
         <div class="md:text-right text-sm leading-7 text-slate-400">
           <div>網站主題：永續未來・森生不息</div>
@@ -375,8 +520,16 @@
     </div>
   </footer>
 
+  <!-- 回到頂部按鈕 -->
+  <button id="toTopBtn" class="fixed bottom-6 right-6 z-40 hidden px-4 py-3 rounded-full bg-forest text-white shadow-glow hover:opacity-90 transition">
+    ↑ Top
+  </button>
+
+  <!-- Lightbox -->
   <div id="lightbox" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4">
-    <button onclick="closeLightbox()" class="absolute top-5 right-5 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full">關閉</button>
+    <button onclick="closeLightbox()" class="absolute top-5 right-5 bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-full">
+      關閉
+    </button>
     <img id="lightboxImg" src="" alt="放大圖片" class="max-w-full max-h-[88vh] rounded-3xl shadow-2xl" />
   </div>
 
@@ -391,8 +544,14 @@
         location: '博愛校區 科學館 S208 教室',
         description: '活動以日本苔球技藝為核心，從泥炭土、赤玉土到苔蘚包覆，帶領參與者從材料選擇、製作觸感與植物照護中理解「減塑」與「回歸自然」的意義。它不是單純園藝課，而是一堂把永續放進生活的環境教育實作。',
         recruit: '能看見地生系如何把植物、環境倫理與生活美學融合，適合喜歡自然、手作與教育推廣的新生。',
-        tags: ['減塑', '植物手作', '微型生態', '生活美學'],
-        cover: 'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135208.png',
+        tags: ['減塑', '植物', '植物手作', '微型生態', '生活美學'],
+        bullets: [
+          '以天然材料取代塑膠盆器，呼應減塑與低廢棄理念。',
+          '透過手作過程建立與植物、土壤的直接感知。',
+          '結合園藝美感與環境教育內涵。'
+        ],
+        value: '這項活動把植物栽培、減塑行動與自然材質應用結合在一起，讓永續不只是抽象口號，而是可以被真正做出來、帶回生活中照顧的綠色實踐。',
+        audience: '適合喜歡植物、喜歡動手做、也希望把環境理念融入日常生活的新生。',
         images: [
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135208.png',
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135219.png',
@@ -410,7 +569,13 @@
         description: '透過「森林真相快問快答」與「我的碳足跡幾棵樹？」等站點，讓參與者實際操作碳排與樹木吸收二氧化碳的對應想像，將抽象的碳匯知識轉換為具體而有趣的學習經驗。',
         recruit: '展現地生系學生能把環境議題設計成互動教學，具備知識轉譯與現場引導能力。',
         tags: ['碳匯', '碳足跡', '環境互動', '知識遊戲'],
-        cover: 'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135700.png',
+        bullets: [
+          '以遊戲方式降低碳匯概念的理解門檻。',
+          '把環境議題轉譯成能立即參與的互動形式。',
+          '結合計算與情境反思，提升參與感。'
+        ],
+        value: '它讓碳足跡與樹木吸碳這些抽象名詞變得具體，幫助參與者用更直觀的方式理解個人行為與環境之間的連結。',
+        audience: '適合對環境議題、碳排放、永續公民行動有興趣的新生。',
         images: [
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135700.png',
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135707.png',
@@ -426,8 +591,14 @@
         location: '博愛校區 科學館 海龜牆',
         description: '活動透過象徵森林資源的積木塔與隨機行為卡，讓參與者意識到不同選擇如何影響森林穩定。最後再把自己的承諾寫在葉子卡上，貼到承諾樹，讓環境意識從遊戲延伸到個人行動。',
         recruit: '能看見地生系如何把森林保育做成人人都能進入的教育活動，兼具互動性與公共溝通力。',
-        tags: ['森林保育', '承諾樹', '行為反思', '遊戲式學習'],
-        cover: 'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135730.png',
+        tags: ['森林', '森林保育', '承諾樹', '行為反思'],
+        bullets: [
+          '把森林保育轉化成直觀可感的互動體驗。',
+          '透過承諾樹，讓參與者留下個人環保行動。',
+          '兼具遊戲性與反思性。'
+        ],
+        value: '這個活動把森林資源維護的觀念轉化成一種可被體會的結構脆弱性，讓參與者從遊戲中理解永續其實需要每一個人的正確選擇。',
+        audience: '適合喜歡森林、生態保育與公共倡議類型活動的新生。',
         images: [
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135730.png',
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135744.png'
@@ -442,8 +613,14 @@
         location: '博愛校區 勤樸樓 C115 教室',
         description: '課程從植物氣味、居家空氣品質與化學香精替代切入，讓學員使用台灣常見草本植物粉末手作香椎。它把環境教育延伸到「每天呼吸的空間」，讓環保與身體感知連在一起。',
         recruit: '能吸引對植物、環境健康與手作療癒有興趣的新生，看見地生系的人文感與生活實踐力。',
-        tags: ['天然香品', '植物氣味', '居家空氣', '健康環境'],
-        cover: 'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135755.png',
+        tags: ['植物', '天然香品', '居家空氣', '健康環境'],
+        bullets: [
+          '以天然草本材料取代化學香精。',
+          '把環境教育延伸到居家空氣品質。',
+          '結合嗅覺體驗與手作療癒感。'
+        ],
+        value: '它讓環境教育從山林議題走進室內生活，讓學生理解「呼吸的品質」也是永續生活的一部分。',
+        audience: '適合喜歡植物香氣、天然材料、生活設計與健康議題的新生。',
         images: [
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135755.png',
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135803.png',
@@ -459,8 +636,14 @@
         location: '博愛校區 科學館 S204 教室',
         description: '課程引導參與者理解石化石蠟與天然大豆蠟的差異，結合精油、花材與容器再利用設計，讓蠟燭不只是手作成品，也是一堂關於可再生資源、室內空氣品質與循環經濟的生活課。',
         recruit: '很適合呈現地生系把永續議題包裝得兼具美感與教育性，能有效提升網站吸引力。',
-        tags: ['天然大豆蠟', '循環利用', '室內空氣', '生活永續'],
-        cover: 'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135824.png',
+        tags: ['循環', '天然大豆蠟', '室內空氣', '生活永續'],
+        bullets: [
+          '從材質選擇理解石化產品與植物來源產品的差異。',
+          '鼓勵容器再利用，強調循環經濟思維。',
+          '將美感、香氣與永續概念結合。'
+        ],
+        value: '這項活動把可再生資源、低碳材料與生活用品設計放在一起，讓永續不再只是嚴肅知識，而是可被感受的生活選擇。',
+        audience: '適合喜歡手作、美感設計、香氛與生活永續的新生。',
         images: [
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135824.png',
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135835.png',
@@ -476,8 +659,14 @@
         location: '博愛校區 科學館 海龜牆',
         description: '活動帶領參與者從日常消費出發，理解碳足跡、SDGs、責任消費與生產，以及「回收不是第一步，選擇才是」的永續核心觀念。咖啡渣作為切入點，也讓再利用與低碳實踐變得更容易被想像。',
         recruit: '能展現地生系不只會談自然，也關心人與消費、社會與永續的連結，具有公共議題視野。',
-        tags: ['SDG 12', '低碳消費', '源頭減廢', '循環概念'],
-        cover: 'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135857.png',
+        tags: ['循環', 'SDG 12', '低碳消費', '源頭減廢'],
+        bullets: [
+          '從日常飲食消費切入環境教育。',
+          '把再利用與低碳選擇連結到生活決策。',
+          '強調回收之外，更重要的是源頭減量。'
+        ],
+        value: '這個活動提醒參與者，真正的永續不是事後處理垃圾，而是從一開始就做出更好的選擇。',
+        audience: '適合關心日常消費、永續生活與社會實踐的新生。',
         images: [
           'https://huggingface.co/spaces/yaxinnnn/2025_Environmental_Education/resolve/main/%E8%9E%A2%E5%B9%95%E6%93%B7%E5%8F%96%E7%95%AB%E9%9D%A2%202026-04-21%20135857.png'
         ]
@@ -513,16 +702,28 @@
 
     let currentQuiz = 0;
     let answers = { practice: 0, advocate: 0, forest: 0 };
+    let currentTypeFilter = 'all';
+    let currentTagFilter = 'all';
+    let currentGalleryFilter = 'all';
 
-    function renderActivities(filter = 'all') {
+    function renderActivities() {
       const grid = document.getElementById('activityGrid');
       grid.innerHTML = '';
-      const filtered = filter === 'all' ? activities : activities.filter(a => a.type === filter);
+
+      let filtered = activities;
+
+      if (currentTypeFilter !== 'all') {
+        filtered = filtered.filter(a => a.type === currentTypeFilter);
+      }
+
+      if (currentTagFilter !== 'all') {
+        filtered = filtered.filter(a => a.tags.some(tag => tag.includes(currentTagFilter)));
+      }
+
       filtered.forEach((a, index) => {
         const card = document.createElement('button');
-        card.className = 'activity-card text-left bg-white rounded-[2rem] overflow-hidden shadow-soft border border-slate-100 hover:-translate-y-1 transition';
+        card.className = 'activity-card text-left bg-white rounded-[2rem] overflow-hidden shadow-card border border-slate-100 hover:-translate-y-1 transition';
         card.innerHTML = `
-          <img src="${a.cover}" alt="${a.title}" class="w-full h-56 object-cover" />
           <div class="p-6">
             <div class="flex items-center justify-between gap-3">
               <span class="text-xs font-bold px-3 py-1 rounded-full ${a.type === 'workshop' ? 'bg-green-100 text-forest' : 'bg-amber-100 text-amber-700'}">
@@ -530,22 +731,45 @@
               </span>
               <span class="text-xs text-slate-500">#${index + 1}</span>
             </div>
+
             <h3 class="text-2xl font-black mt-4">${a.title}</h3>
             <p class="mt-3 text-slate-600 leading-7">${a.short}</p>
+
+            <div class="flex flex-wrap gap-2 mt-4">
+              ${a.tags.slice(0, 4).map(tag => `
+                <span class="px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700">${tag}</span>
+              `).join('')}
+            </div>
+
+            <div class="mt-5 text-sm text-forest font-bold">點我查看活動介紹 →</div>
           </div>
         `;
         card.onclick = () => selectActivity(a.id, card);
         grid.appendChild(card);
       });
+
       setTimeout(() => {
         const first = grid.querySelector('.activity-card');
-        if (first && filtered[0]) selectActivity(filtered[0].id, first);
+        if (first && filtered[0]) {
+          selectActivity(filtered[0].id, first);
+        } else {
+          document.getElementById('panelTitle').textContent = '目前沒有符合篩選條件的活動';
+          document.getElementById('panelTime').textContent = '-';
+          document.getElementById('panelLocation').textContent = '-';
+          document.getElementById('panelDescription').textContent = '請重新選擇上方分類或關鍵字。';
+          document.getElementById('panelRecruit').textContent = '-';
+          document.getElementById('panelTags').innerHTML = '';
+          document.getElementById('featureBullets').innerHTML = '';
+          document.getElementById('panelValue').textContent = '-';
+          document.getElementById('panelAudience').textContent = '-';
+        }
       }, 50);
     }
 
     function selectActivity(id, el) {
       document.querySelectorAll('.activity-card').forEach(card => card.classList.remove('active'));
       if (el) el.classList.add('active');
+
       const item = activities.find(a => a.id === id);
       if (!item) return;
 
@@ -554,15 +778,17 @@
       document.getElementById('panelLocation').textContent = item.location;
       document.getElementById('panelDescription').textContent = item.description;
       document.getElementById('panelRecruit').textContent = item.recruit;
+      document.getElementById('panelValue').textContent = item.value;
+      document.getElementById('panelAudience').textContent = item.audience;
 
       const tags = document.getElementById('panelTags');
-      tags.innerHTML = item.tags.map(tag => `<span class="px-3 py-1.5 rounded-full bg-green-50 text-forest text-sm font-semibold border border-green-100">${tag}</span>`).join('');
+      tags.innerHTML = item.tags.map(tag => `
+        <span class="px-3 py-1.5 rounded-full bg-green-50 text-forest text-sm font-semibold border border-green-100">${tag}</span>
+      `).join('');
 
-      const gallery = document.getElementById('panelGallery');
-      gallery.innerHTML = item.images.map((src, idx) => `
-        <button onclick="openLightbox('${src}')" class="group block overflow-hidden rounded-[1.5rem] shadow-soft bg-white border border-slate-100">
-          <img src="${src}" alt="${item.title} 照片 ${idx + 1}" class="w-full h-72 object-cover group-hover:scale-105 transition duration-500" />
-        </button>
+      const bullets = document.getElementById('featureBullets');
+      bullets.innerHTML = item.bullets.map(b => `
+        <div class="rounded-2xl bg-slate-50 p-4 text-slate-700 leading-7">${b}</div>
       `).join('');
     }
 
@@ -586,6 +812,7 @@
 
     function renderQuiz() {
       const quizBox = document.getElementById('quizBox');
+
       if (currentQuiz >= quizData.length) {
         const resultKey = Object.entries(answers).sort((a, b) => b[1] - a[1])[0][0];
         const resultMap = {
@@ -602,6 +829,7 @@
             text: '你特別在意自然資源與長期保育，對森林、生態與永續承諾有高度共鳴。'
           }
         };
+
         quizBox.innerHTML = `
           <div class="text-center">
             <div class="text-sm font-bold text-moss">測驗完成</div>
@@ -612,13 +840,19 @@
         `;
         return;
       }
+
       const q = quizData[currentQuiz];
       quizBox.innerHTML = `
         <div>
           <div class="text-sm font-bold text-moss">第 ${currentQuiz + 1} / ${quizData.length} 題</div>
           <h3 class="text-2xl font-black mt-3">${q.q}</h3>
           <div class="mt-5 space-y-3">
-            ${q.options.map(o => `<button class="w-full text-left px-5 py-4 rounded-2xl border border-slate-200 hover:border-forest hover:bg-green-50 transition font-medium" onclick="answerQuiz('${o.score}')">${o.text}</button>`).join('')}
+            ${q.options.map(o => `
+              <button class="w-full text-left px-5 py-4 rounded-2xl border border-slate-200 hover:border-forest hover:bg-green-50 transition font-medium"
+                onclick="answerQuiz('${o.score}')">
+                ${o.text}
+              </button>
+            `).join('')}
           </div>
         </div>
       `;
@@ -638,7 +872,14 @@
 
     function renderMasonry() {
       const wrap = document.getElementById('masonryGallery');
-      const allImages = activities.flatMap(a => a.images.map(src => ({ src, title: a.title })));
+      let allImages = activities.flatMap(a =>
+        a.images.map(src => ({ src, title: a.title }))
+      );
+
+      if (currentGalleryFilter !== 'all') {
+        allImages = allImages.filter(img => img.title === currentGalleryFilter);
+      }
+
       wrap.innerHTML = allImages.map((img, i) => `
         <div class="masonry-item">
           <button onclick="openLightbox('${img.src}')" class="block w-full overflow-hidden rounded-[1.5rem] bg-white shadow-soft border border-slate-100">
@@ -651,6 +892,27 @@
       `).join('');
     }
 
+    // 數字動畫
+    function animateCounters() {
+      const counters = document.querySelectorAll('.counter');
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        let count = 0;
+        const step = Math.max(1, Math.ceil(target / 30));
+        const update = () => {
+          count += step;
+          if (count >= target) {
+            counter.textContent = target;
+          } else {
+            counter.textContent = count;
+            requestAnimationFrame(update);
+          }
+        };
+        update();
+      });
+    }
+
+    // 活動類型篩選
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => {
@@ -659,13 +921,78 @@
         });
         btn.classList.remove('bg-white', 'text-slate-700', 'border');
         btn.classList.add('bg-forest', 'text-white');
-        renderActivities(btn.dataset.filter);
+        currentTypeFilter = btn.dataset.filter;
+        renderActivities();
       });
     });
 
+    // 關鍵字篩選
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentTagFilter = chip.dataset.tag;
+        renderActivities();
+      });
+    });
+
+    // 照片牆篩選
+    document.querySelectorAll('.gallery-filter').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.gallery-filter').forEach(b => {
+          b.classList.remove('bg-forest', 'text-white');
+          b.classList.add('bg-white', 'text-slate-700', 'border');
+        });
+        btn.classList.remove('bg-white', 'text-slate-700', 'border');
+        btn.classList.add('bg-forest', 'text-white');
+        currentGalleryFilter = btn.dataset.gallery;
+        renderMasonry();
+      });
+    });
+
+    // 導覽列高亮
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    function updateActiveNav() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        const sectionHeight = section.offsetHeight;
+        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    // 回到頂部按鈕
+    const toTopBtn = document.getElementById('toTopBtn');
+    window.addEventListener('scroll', () => {
+      updateActiveNav();
+      if (window.scrollY > 500) {
+        toTopBtn.classList.remove('hidden');
+      } else {
+        toTopBtn.classList.add('hidden');
+      }
+    });
+
+    toTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 初始化
     renderActivities();
     renderQuiz();
     renderMasonry();
+    animateCounters();
+    updateActiveNav();
   </script>
 </body>
 </html>
