@@ -882,18 +882,17 @@
       const grid = document.getElementById('themePhotoGrid');
       const images = currentActivity.images;
 
-      grid.innerHTML = images.map((src, index) => `
+      grid.innerHTML = images.map((src) => `
         <div class="photo-card rounded-[1.5rem] border border-green-100 shadow-soft overflow-hidden">
           <div class="photo-frame h-[290px] sm:h-[320px] lg:h-[340px] flex items-center justify-center p-3">
             <img
               src="${src}"
-              alt="${currentActivity.title} 活動照片 ${index + 1}"
+              alt="${currentActivity.title} 活動照片"
               class="max-w-full max-h-full object-contain rounded-2xl"
             />
           </div>
           <div class="px-5 py-4 border-t border-green-100 bg-white/80">
             <div class="text-sm font-bold text-forest">${currentActivity.title}</div>
-            <div class="text-xs text-slate-500 mt-1">照片 ${index + 1}</div>
           </div>
         </div>
       `).join('');
