@@ -126,6 +126,24 @@
         radial-gradient(circle at top left, rgba(223,241,221,.65), transparent 35%),
         #f8faf7;
     }
+
+    .video-frame {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 60px rgba(39,93,56,0.18);
+      background: #000;
+    }
+
+    .video-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
   </style>
 </head>
 
@@ -148,7 +166,7 @@
           <a href="#highlights" class="nav-link hover:text-forest transition">六大活動</a>
           <a href="#detailPanel" class="nav-link hover:text-forest transition">主題成果</a>
           <a href="#timeline" class="nav-link hover:text-forest transition">活動時程</a>
-          <a href="#quizSection" class="nav-link hover:text-forest transition">互動測驗</a>
+          <a href="#videoSection" class="nav-link hover:text-forest transition">環教週影片</a>
           <a href="#impression" class="nav-link hover:text-forest transition">成果特色</a>
         </nav>
 
@@ -211,8 +229,8 @@
               <a href="#highlights" class="px-6 py-3 rounded-2xl bg-forest text-white font-semibold shadow-glow hover:-translate-y-0.5 transition">
                 探索六大活動
               </a>
-              <a href="#detailPanel" class="px-6 py-3 rounded-2xl bg-white text-forest font-semibold border border-forest/15 hover:bg-green-50 transition">
-                查看主題成果
+              <a href="#videoSection" class="px-6 py-3 rounded-2xl bg-white text-forest font-semibold border border-forest/15 hover:bg-green-50 transition">
+                觀看環教週影片
               </a>
             </div>
           </div>
@@ -490,31 +508,39 @@
       </div>
     </section>
 
-    <section id="quizSection" class="py-16 bg-gradient-to-br from-forest to-moss text-white">
+    <section id="videoSection" class="py-16 bg-gradient-to-br from-forest to-moss text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 items-center">
           <div>
             <div class="inline-flex px-3 py-1 rounded-full bg-white/15 text-sm font-bold">
-              互動小測驗
+              環教週影片
             </div>
             <h2 class="text-3xl sm:text-4xl font-black mt-4">
-              你最想參加哪一類環境教育活動？
+              2024 環教週活動回顧
             </h2>
             <p class="mt-4 text-green-50 leading-8">
-              透過簡單的互動題目，感受 2025 環教週不同活動形式所呈現的特色。
+              透過影片回顧過往環境教育週的活動樣貌，延伸呈現地生系在環境教育推廣上的持續性與多元性。
             </p>
 
             <div class="mt-6 rounded-[1.5rem] bg-white/10 p-5 border border-white/10">
-              <div class="font-bold">互動設計</div>
+              <div class="font-bold">影片說明</div>
               <p class="mt-2 leading-7 text-green-50">
-                本區作為成果網站的延伸互動內容，讓瀏覽者在閱讀活動資訊之外，
-                也能更主動地理解不同活動的差異。
+                本區嵌入 2024 環教週影片，作為本次成果網站的延伸內容，讓瀏覽者能從影像中更直觀感受活動氛圍。
               </p>
             </div>
           </div>
 
-          <div class="bg-white text-slate-800 rounded-[2rem] p-7 shadow-glow">
-            <div id="quizBox"></div>
+          <div class="bg-white/10 rounded-[2rem] p-4 border border-white/10 shadow-glow">
+            <div class="video-frame">
+              <iframe
+                src="https://www.youtube.com/embed/oylO5bzwKQk?si=jcksjYPFqxP5dkt3"
+                title="2024 環教週影片"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+              </iframe>
+            </div>
           </div>
         </div>
       </div>
@@ -552,7 +578,7 @@
 
               <div class="rounded-3xl bg-white/5 p-5 border border-white/10">
                 <div class="text-lg font-bold">互動瀏覽</div>
-                <p class="mt-2 text-slate-300 leading-7">透過卡片、篩選與測驗提升網站可看性。</p>
+                <p class="mt-2 text-slate-300 leading-7">透過卡片與篩選提升網站可看性。</p>
               </div>
 
               <div class="rounded-3xl bg-white/5 p-5 border border-white/10">
@@ -737,35 +763,6 @@
       }
     ];
 
-    const quizData = [
-      {
-        q: '如果參加 2025 環教週，你最有興趣的活動形式是？',
-        options: [
-          { text: '動手做手作與植物作品', score: 'practice' },
-          { text: '闖關遊戲與互動體驗', score: 'advocate' },
-          { text: '森林與自然議題延伸活動', score: 'forest' }
-        ]
-      },
-      {
-        q: '你最想從活動中獲得什麼？',
-        options: [
-          { text: '做出成品，帶走一份實作成果', score: 'practice' },
-          { text: '用輕鬆方式理解環境議題', score: 'advocate' },
-          { text: '對自然與保育有更多認識', score: 'forest' }
-        ]
-      },
-      {
-        q: '以下哪一種主題最吸引你？',
-        options: [
-          { text: '植物、香氣與生活美學', score: 'practice' },
-          { text: '碳足跡、低碳消費與 SDGs', score: 'advocate' },
-          { text: '森林保育與自然承諾', score: 'forest' }
-        ]
-      }
-    ];
-
-    let currentQuiz = 0;
-    let answers = { practice: 0, advocate: 0, forest: 0 };
     let currentTypeFilter = 'all';
     let currentTagFilter = 'all';
     let currentActivity = activities[0];
@@ -898,70 +895,6 @@
       `).join('');
     }
 
-    function renderQuiz() {
-      const quizBox = document.getElementById('quizBox');
-
-      if (currentQuiz >= quizData.length) {
-        const resultKey = Object.entries(answers).sort((a, b) => b[1] - a[1])[0][0];
-
-        const resultMap = {
-          practice: {
-            title: '你偏向「手作體驗型」',
-            text: '你可能會對苔球、草本香椎或手工蠟燭這類工作坊特別有興趣，喜歡透過實際製作來感受活動內容。'
-          },
-          advocate: {
-            title: '你偏向「互動參與型」',
-            text: '你可能會更喜歡碳足跡、低碳生活與闖關設計這類活動，從互動中理解環境議題。'
-          },
-          forest: {
-            title: '你偏向「自然議題型」',
-            text: '你可能特別關注森林、生態與環境承諾等內容，喜歡從活動中延伸更多自然保育的思考。'
-          }
-        };
-
-        quizBox.innerHTML = `
-          <div class="text-center">
-            <div class="text-sm font-bold text-moss">測驗完成</div>
-            <h3 class="text-3xl font-black mt-3 text-forest">${resultMap[resultKey].title}</h3>
-            <p class="mt-4 text-slate-600 leading-8">${resultMap[resultKey].text}</p>
-            <button onclick="restartQuiz()" class="mt-6 px-5 py-3 rounded-2xl bg-forest text-white font-semibold">
-              重新測驗
-            </button>
-          </div>
-        `;
-        return;
-      }
-
-      const q = quizData[currentQuiz];
-
-      quizBox.innerHTML = `
-        <div>
-          <div class="text-sm font-bold text-moss">第 ${currentQuiz + 1} / ${quizData.length} 題</div>
-          <h3 class="text-2xl font-black mt-3">${q.q}</h3>
-          <div class="mt-5 space-y-3">
-            ${q.options.map(o => `
-              <button class="w-full text-left px-5 py-4 rounded-2xl border border-slate-200 hover:border-forest hover:bg-green-50 transition font-medium"
-                onclick="answerQuiz('${o.score}')">
-                ${o.text}
-              </button>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    function answerQuiz(score) {
-      answers[score] += 1;
-      currentQuiz += 1;
-      renderQuiz();
-    }
-
-    function restartQuiz() {
-      currentQuiz = 0;
-      answers = { practice: 0, advocate: 0, forest: 0 };
-      renderQuiz();
-    }
-
     function animateCounters() {
       const counters = document.querySelectorAll('.counter');
 
@@ -1054,7 +987,6 @@
     });
 
     renderActivities();
-    renderQuiz();
     animateCounters();
     updateActiveNav();
   </script>
